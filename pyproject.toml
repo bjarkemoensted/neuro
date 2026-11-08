@@ -1,0 +1,50 @@
+[project]
+name = "neuro"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Bjarke Moensted", email = "bjarkemoensted@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "ipykernel>=7.4.0",
+    "jupyterlab>=4.6.6",
+    "nbstripout>=0.9.1",
+    "pre-commit>=4.7.0",
+    "pytest>=9.2.0",
+]
+
+[tool.mypy]
+strict = true
+warn_unused_configs = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"  # Match your Python version
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "UP",   # pyupgrade
+    "SIM",  # flake8-simplify
+]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.1",
+    "pyright>=1.1.414",
+    "ruff>=0.17.4",
+]
