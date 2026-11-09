@@ -6,5 +6,5 @@ __version__ = version("neuro")
 from neuro.plotting import setup_matplotlib
 
 __all__ = [
-    'setup_matplotlib'
+    'setup_matplotlib',
 ]

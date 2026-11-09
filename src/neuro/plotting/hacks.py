@@ -46,9 +46,10 @@ def plot_function(
         ax: Axes|None=None,
         n_points: int=10_000,
         xmin: float = 0.0,
-        xmax: float = 100,
+        xmax: float = 10,
         xlabel: str|None|type[NONE]=NONE,
-        ylabel: str|None|type[NONE]=NONE
+        ylabel: str|None|type[NONE]=None,
+        label: str|None=None
         ) -> Axes:
 
     if ax is None:
@@ -66,6 +67,6 @@ def plot_function(
     if ylabel is not None and ax.get_ylabel() == "":
         ax.set_ylabel(ylabel if isinstance(ylabel, str) else inferred.name)
 
-    ax.plot(x, y)
+    ax.plot(x, y, label=label)
 
     return ax
