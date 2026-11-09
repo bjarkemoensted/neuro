@@ -6,6 +6,12 @@ axes.grid: True
 axes.prop_cycle: cycler("color", ["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"])
 
 lines.linewidth: 2
-legend.frameon: False
 savefig.dpi: 300
 savefig.bbox: tight
+
+legend.loc: best
+legend.facecolor: white
+legend.edgecolor: none
+legend.framealpha: 0.8
+legend.fancybox: True
+legend.frameon: True
