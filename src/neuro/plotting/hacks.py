@@ -10,6 +10,8 @@ import numpy as np
 import numpy.typing as npt
 from matplotlib.axes import Axes
 
+from neuro.sentinels import NONE
+
 # The allowed types for matplotlib colors :'(
 type ColorType = (
     tuple[float, float, float]
@@ -18,14 +20,6 @@ type ColorType = (
     | tuple[tuple[float, float, float] | str, float]
     | tuple[tuple[float, float, float, float], float]
 )
-
-
-class Sentinel:
-    pass
-
-
-class NONE(Sentinel):
-    pass
 
 
 type functype = Callable[[float], float] | Callable[[npt.NDArray[np.floating]], npt.NDArray[np.floating]]
