@@ -1,4 +1,7 @@
-def label_with_values(vals: dict[object, object], n_digits: int=2) -> str:
+from typing import Any
+
+
+def label_with_values(vals: dict[Any, Any], n_digits: int=2) -> str:
     """Makes a text label with parameter values, for example
     {'a': 42, 'b': 1.123} -> "a=42,b=1.12"
     """

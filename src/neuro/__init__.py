@@ -3,6 +3,7 @@ from importlib.metadata import version
 __version__ = version("neuro")
 
 from . import plotting, sentinels
+from .dynamical_system import DynamicalSystem
 from .plotting import setup_matplotlib
 from .simulation import simulate
 
@@ -11,4 +12,5 @@ __all__ = [
     "simulate",
     "plotting",
     "sentinels",
+    "DynamicalSystem",
 ]

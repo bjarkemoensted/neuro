@@ -51,7 +51,7 @@ class ActiveNotebookContext:
 
         return line
 
-    def iter_cell_row_line(self) -> Iterator[tuple[int, int, str]]:
+    def iter_cell_row_line(self) -> Iterator[tuple[str, int, str]]:
         """Iterates over tuples of cell id, line number, line
         for all code cells"""
 
@@ -62,7 +62,7 @@ class ActiveNotebookContext:
             # Skip non-code cells
             if cell["cell_type"] != "code":
                 continue
-            id_ = int(cell["id"])
+            id_ = cell["id"]
             for line in cell["source"]:
                 assert isinstance(line, str)
                 yield id_, line_number, line

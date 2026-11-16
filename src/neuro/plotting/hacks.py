@@ -10,22 +10,12 @@ import numpy as np
 import numpy.typing as npt
 from matplotlib.axes import Axes
 
+from neuro.plotting.pyplot_utils import cycle_color
 from neuro.sentinels import NONE
-
-# The allowed types for matplotlib colors :'(
-type ColorType = (
-    tuple[float, float, float]
-    | str
-    | tuple[float, float, float, float]
-    | tuple[tuple[float, float, float] | str, float]
-    | tuple[tuple[float, float, float, float], float]
-)
+from neuro.types import ColorType, FuncType
 
 
-type functype = Callable[[float], float] | Callable[[npt.NDArray[np.floating]], npt.NDArray[np.floating]]
-
-
-def _infer_function_name(func: functype) -> str:
+def _infer_function_name(func: FuncType) -> str:
     res = getattr(func, '__name__', func.__class__.__name__)
     return res
 
@@ -36,7 +26,7 @@ class FunctionProperties:
     free_var_name: str
 
     @classmethod
-    def infer(cls, func: functype) -> Self:
+    def infer(cls, func: FuncType) -> Self:
         sig = inspect.signature(func)
         varname = next(iter(sig.parameters))
         funcname = _infer_function_name(func)
@@ -75,17 +65,6 @@ def plot_function(
     return ax
 
 
-def _grab_color(ax: Axes) -> ColorType:
-    """Hack for grabbing the next color in the color cycle for an axis, and incrementing
-    the cycle.
-    There's no public-facing way of doing this, so we plot a non-existing line segment, grab its
-    color, and remove it again."""
-    line, = ax.plot([], [])
-    color = line.get_color()
-    line.remove()
-    return color
-
-
 def plot_2D_vector(
     vec: npt.NDArray[np.floating|np.int_]|Sequence[float],
     ax: Axes|None=None,
@@ -103,7 +82,7 @@ def plot_2D_vector(
 
     # If no color is specified, use the next in the ax' cycle
     if isinstance(color, type) and issubclass(color, NONE):
-        color = _grab_color(ax)
+        color = cycle_color(ax)
 
     _kwargs = {} if quiver_kwargs is None else quiver_kwargs
     ax.quiver(
