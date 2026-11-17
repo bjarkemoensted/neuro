@@ -12,7 +12,7 @@ def plot_trajectory(
     ax: Axes | None = None,
     cmap: str | Colormap | None = DEFAULT_COLORMAP,
     colorbar: bool = True,
-    markersize: float = 4.0,
+    markersize: float = 4.0
 ) -> Axes:
     """Plots a history of 2D state vectors."""
 

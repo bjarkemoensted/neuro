@@ -148,7 +148,7 @@ def plot_vector_field(
         ) -> None:
     grid = _make_mesh(limits=limits, n_points=n_points)
     X, Y = grid
-    U, V = system.time_derivative_lambdified(*grid)
+    U, V = system.f_unpacked(*grid)
 
     magnitude = np.hypot(U, V)
 

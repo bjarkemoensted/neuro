@@ -1,15 +1,16 @@
-from functools import partial
-from typing import Literal, Protocol, TypeGuard, get_args, runtime_checkable
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from typing import Literal, Protocol, runtime_checkable
 
 import numpy as np
 import numpy.typing as npt
 
+# Represent the time derivative...
+type Matrixdt = npt.NDArray[np.floating]  # as a matrix (for linear systems)
+type Vectordt = Callable[[npt.NDArray[np.floating]], npt.NDArray[np.floating]]  # As a function
+
+
 type IntegrationMethod = Literal["forward_euler",]
-_integration_methods = get_args(IntegrationMethod.__value__)
-
-
-def is_integration_method(s: object) -> TypeGuard[IntegrationMethod]:
-    return s in _integration_methods
 
 
 @runtime_checkable
@@ -18,28 +19,48 @@ class StateUpdater(Protocol):
     def __call__(self, x: npt.NDArray[np.floating], dt: float) -> npt.NDArray[np.floating]: ...
 
 
-def forward_euler_update(
-        A: npt.NDArray[np.floating],
-        x: npt.NDArray[np.floating],
-        dt: float
-    ) -> npt.NDArray[np.floating]:
-    """Performs a simple forward-Euler update step, i.e.
-    x -> dt*A*x"""
+class BaseUpdater(ABC):
+    """Base class for state updaters.
+    Child classes of this implement various methods for
+    updating a state vectors x -> x + delta x"""
 
-    delta = dt*(A @ x)
-    res = x + delta
-    return res
+    def __init__(self, f: Vectordt) -> None:
+        self.f = f
+
+    @abstractmethod
+    def __call__(self, x: npt.NDArray[np.floating], dt: float) -> npt.NDArray[np.floating]:
+        raise NotImplementedError
 
 
-def make_updater(
-        A: npt.NDArray[np.floating],
-        method: IntegrationMethod
-        ) -> StateUpdater:
-    """Take the name of an integration method, and returns a callable which can update
-    a state vector"""
+class ForwardEulerUpdater(BaseUpdater):
+    """The simple 'forward Euler' method for simulation.
+    Uses the time derivative at each step and updates like
+    x -> x + dt * f(x)*x"""
 
+    def __init__(self, f: Vectordt) -> None:
+        self.f = f
+
+    def __call__(self, x: npt.NDArray[np.floating], dt: float) -> npt.NDArray[np.floating]:
+        step = self.f(x).flatten() if callable(self.f) else (self.f @ x)
+        res = x + dt*step
+        return res
+
+
+def make_updater(f: Vectordt, method: IntegrationMethod) -> StateUpdater:
+    """Makes a state updater given a time derivative function f(x),
+        and a string representing the method to be used"""
+    
     match method:
         case "forward_euler":
-            return partial(forward_euler_update, A=A)
+            return ForwardEulerUpdater(f)
         case _:
-            raise ValueError(f"Invalid integration method: {method:r!}")
+            raise ValueError(f"Invalid integration method: {method}")
+
+
+def make_linear_updater(A: Matrixdt, method: IntegrationMethod) -> StateUpdater:
+    """Creates a state updater for a linear system, given the matrix A"""
+
+    return make_updater(
+        lambda x: (A @ x),
+        method=method
+    )
