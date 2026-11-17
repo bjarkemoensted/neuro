@@ -11,9 +11,14 @@ dependencies = [
     "ipykernel>=7.4.0",
     "jupyterlab>=4.6.6",
     "matplotlib>=3.11.2",
+    "nbqa>=1.10.0",
     "nbstripout>=0.9.1",
     "pre-commit>=4.7.0",
+    "pyright>=1.1.414",
     "pytest>=9.2.0",
+    "scipy>=1.18.1",
+    "scipy-stubs>=1.18.1.1",
+    "sympy>=1.14.0",
 ]
 
 [tool.mypy]
@@ -22,7 +27,7 @@ warn_unused_configs = true
 
 [tool.ruff]
 line-length = 120
-target-version = "py312"  # Match your Python version
+target-version = "py314"  # Match your Python version
 
 [tool.ruff.lint]
 select = [

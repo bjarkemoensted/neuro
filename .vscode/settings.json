@@ -12,5 +12,8 @@
         ".pytest_cache": true,
         ".ruff_cache": true,
     },
-    "python.analysis.autoImportCompletions": false
+    "python.analysis.autoImportCompletions": false,
+    "python.languageServer": "Pylance",
+    "python.analysis.typeCheckingMode": "standard",
+    "python.analysis.languageServerMode": "default",
 }
