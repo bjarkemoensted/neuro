@@ -77,7 +77,11 @@ class ActiveNotebookContext:
         cell_id = self.cell_ids[line]
         for _ in range(n_max):
             next_ = running + step
-            cell_changed = self.cell_ids[next_] != cell_id
+            try:
+                cell_changed = self.cell_ids[next_] != cell_id
+            except IndexError:
+                cell_changed = True
+
             if cell_changed:
                 break
             else:
