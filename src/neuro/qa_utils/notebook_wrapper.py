@@ -31,8 +31,14 @@ class ActiveNotebookContext:
         self.script_path = Path(self.tmp.file.name)
 
         # Store the lines of python code, and the corresponding cell IDs
-        cell_ids_and_lines = ((id_, line) for id_, _, line in self.iter_cell_row_line())
-        self.cell_ids, self.lines = zip(*cell_ids_and_lines, strict=True)
+        cell_ids_and_lines = [(id_, line) for id_, _, line in self.iter_cell_row_line()]
+
+        # Quickfix for if cell list is empty (zero cells), which retains the type hinting as tuples of strings for each
+        _empty: list[tuple[str, ...]] = [(), ()]
+        a, b = zip(*cell_ids_and_lines, strict=True) if cell_ids_and_lines else _empty
+        self.cell_ids = a
+        self.lines = b
+
         self.pure_python_lines = tuple(self.preprocess_python_code(line) for line in self.lines)
         self.pure_python = "".join(self.pure_python_lines)
         self.script_path.write_text(self.pure_python)
