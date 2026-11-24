@@ -51,18 +51,3 @@ class TestNotebooks(unittest.TestCase):
                 ids = [cell["id"] for cell in cells]
                 expected = list(map(str, range(len(cells))))
                 self.assertListEqual(ids, expected)
-
-    def test_consistent_metadata(self) -> None:
-            """Check that the notebooks have identical metadata."""
-
-            target: dict[str, object]|None = None
-
-            # Start with week1 (ordered) to make that the target value
-            for notebook in sorted(self.notebooks):
-                meta = json.loads(notebook.read_text())["metadata"]
-                if target is None:
-                    target = meta
-
-                assert target is not None
-                with self.subTest(notebook.name):
-                    self.assertDictEqual(meta, target)

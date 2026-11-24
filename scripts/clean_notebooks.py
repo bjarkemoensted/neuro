@@ -127,7 +127,7 @@ def main() -> None:
 
     for nb, r in change.items():
         print(f"Writing to {nb}...")
-        out = json.dumps(r.d_final)
+        out = json.dumps(r.d_final, indent=2)
         nb.write_text(out)
 
     print("Done!")
