@@ -26,3 +26,6 @@ def nernst_potential(
     res = conc * (constants.R * T) / (constants.F * float(z))
 
     return res.to(constants.ureg.millivolts)
+
+
+# TODO add GHK equation. Rename module to 'membrane'. Maybe add dataclasses here or separately
